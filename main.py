@@ -94,6 +94,30 @@ def adminLogout():
         session['admin_id']=None
         session['admin_name']=None
         return redirect('/')
+
+#admin approve user
+@app.route('/admin/approve-user/<int:id>')
+def adminApprove(id):
+    if not session.get('admin_id'):
+        return redirect('/admin')
+    User().query.filter_by(id=id).update(dict(status=1))
+    db.session.commit()
+    flash('Approve Successfully','success')
+    return redirect('/admin/get-all-user')
+    # return render_template('admin/all-user.html',title='Approve User',users=users)
+
+# admin get all user 
+@app.route('/admin/get-all-user', methods=["POST","GET"])
+def adminGetAllUser():
+    if not session.get('admin_id'):
+        return redirect('/admin')
+    if request.method== "POST":
+        search=request.form.get('search')
+        users=User.query.filter(User.username.like('%'+search+'%')).all()
+        return render_template('admin/all-user.html',title='Approve User',users=users)
+    else:
+        users=User.query.all()
+        return render_template('admin/all-user.html',title='Approve User',users=users)
     
 #---------------------user area---------------------
 # user dashboard
