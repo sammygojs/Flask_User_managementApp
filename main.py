@@ -25,20 +25,66 @@ class User(db.Model):
     def __repr__(self):
         return f'User("{self.id}","{self.fname}","{self.lname}","{self.email}","{self.edu}","{self.username}","{self.status}")'
 
+# create admin Class
+class Admin(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    username=db.Column(db.String(255), nullable=False)
+    password=db.Column(db.String(255), nullable=False)
+
+    def __repr__(self):
+        return f'Admin("{self.username}","{self.id}")'
+
+
+
+# admin=Admin(username='admin',password=bcrypt.generate_password_hash('admin',10))
+
 #create table
 with app.app_context():
     db.create_all()
-# db.create_all()
+    # db.session.add(admin)
+    # db.session.commit()
 
 #main index login
 @app.route('/')
 def index():
     return render_template('index.html',title="")
 
-#admin login
-@app.route('/admin')
+# admin loign
+@app.route('/admin',methods=["POST","GET"])
 def adminIndex():
-    return render_template('admin/index.html',title="Admin login")
+    # chect the request is post or not
+    if request.method == 'POST':
+        # get the value of field
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # check the value is not empty
+        if username=="" and password=="":
+            flash('Please fill all the field','danger')
+            return redirect('/admin')
+        else:
+            # login admin by username 
+            admins=Admin().query.filter_by(username=username).first()
+            if admins and bcrypt.check_password_hash(admins.password,password):
+                session['admin_id']=admins.id
+                session['admin_name']=admins.username
+                flash('Login Successfully','success')
+                return redirect('/admin/dashboard')
+            else:
+                flash('Invalid Email and Password','danger')
+                return redirect('/admin/')
+    else:
+        return render_template('admin/index.html',title="Admin Login")
+
+# admin Dashboard
+@app.route('/admin/dashboard')
+def adminDashboard():
+    if not session.get('admin_id'):
+        return redirect('/admin/')
+    totalUser=User.query.count()
+    totalApprove=User.query.filter_by(status=1).count()
+    NotTotalApprove=User.query.filter_by(status=0).count()
+    return render_template('admin/dashboard.html',title="Admin Dashboard",totalUser=totalUser,totalApprove=totalApprove,NotTotalApprove=NotTotalApprove)
+
 
 #---------------------user area---------------------
 # user dashboard
