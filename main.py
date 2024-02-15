@@ -71,7 +71,7 @@ def adminIndex():
                 return redirect('/admin/dashboard')
             else:
                 flash('Invalid Email and Password','danger')
-                return redirect('/admin/')
+                return redirect('/admin')
     else:
         return render_template('admin/index.html',title="Admin Login")
 
@@ -79,13 +79,22 @@ def adminIndex():
 @app.route('/admin/dashboard')
 def adminDashboard():
     if not session.get('admin_id'):
-        return redirect('/admin/')
+        return redirect('/admin')
     totalUser=User.query.count()
     totalApprove=User.query.filter_by(status=1).count()
     NotTotalApprove=User.query.filter_by(status=0).count()
     return render_template('admin/dashboard.html',title="Admin Dashboard",totalUser=totalUser,totalApprove=totalApprove,NotTotalApprove=NotTotalApprove)
 
-
+# admin logout
+@app.route('/admin/logout')
+def adminLogout():
+    if not session.get('admin_id'):
+        return redirect('/admin')
+    if session.get('admin_id'):
+        session['admin_id']=None
+        session['admin_name']=None
+        return redirect('/')
+    
 #---------------------user area---------------------
 # user dashboard
 @app.route('/user/dashboard')
