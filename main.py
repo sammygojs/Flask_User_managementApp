@@ -4,7 +4,9 @@ from flask_bcrypt import Bcrypt
 app=Flask(__name__)
 app.config["SECRET_KEY"]='65b0b774279de460f1cc5c92'
 app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ums.sqlite"
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.config["SESSION_PERMANENT"]=False
+app.config["SESSION_TYPE"]='filesystem'
 db=SQLAlchemy(app)
 bcrypt=Bcrypt(app)
 
@@ -60,13 +62,13 @@ def userIndex():
         # check user exist in this email or not
         users=User().query.filter_by(email=email).first()
         if users and bcrypt.check_password_hash(users.password,password):
-            # # check the admin approve your account are not
-            # is_approve=User.query.filter_by(id=users.id).first()
-            # # first return the is_approve:
-            # if is_approve.status == 0:
-            #     flash('Your Account is not approved by Admin','danger')
-            #     return redirect('/user/')
-            # else:
+            # check the admin approve your account are not
+            is_approve=User.query.filter_by(id=users.id).first()
+            # first return the is_approve:
+            if is_approve.status == 0:
+                flash('Your Account is not approved by Admin','danger')
+                return redirect('/user')
+            else:
                 session['user_id']=users.id
                 session['username']=users.username
                 flash('Login Successfully','success')
