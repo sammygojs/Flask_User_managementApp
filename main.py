@@ -20,7 +20,7 @@ class User(db.Model):
     username=db.Column(db.String(255), nullable=False)
     edu=db.Column(db.String(255), nullable=False)
     password=db.Column(db.String(255), nullable=False)
-    status=db.Column(db.Integer,default=0, nullable=False)
+    status=db.Column(db.Integer,default=1, nullable=False)
 
     def __repr__(self):
         return f'User("{self.id}","{self.fname}","{self.lname}","{self.email}","{self.edu}","{self.username}","{self.status}")'
@@ -109,6 +109,16 @@ def userSignup():
     else:
         return render_template('user/signup.html',title="User Signup")
 
+# user logout
+@app.route('/user/logout')
+def userLogout():
+    if not session.get('user_id'):
+        return redirect('/user')
 
+    if session.get('user_id'):
+        session['user_id'] = None
+        session['username'] = None
+        return redirect('/user')
+    
 if __name__=="__main__":
     app.run(debug=True)
