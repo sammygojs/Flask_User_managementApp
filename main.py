@@ -143,7 +143,6 @@ def userChangePassword():
             else:
                 flash('Invalid Email','danger')
                 return redirect('/user/change-password')
-
     else:
         if session.get('user_id'):
             id=session.get('user_id')
@@ -152,6 +151,32 @@ def userChangePassword():
         else:
             return render_template('user/change-password.html',title="Change Password")
 
-    
+# user update profile
+@app.route('/user/update-profile', methods=["POST","GET"])
+def userUpdateProfile():
+    if not session.get('user_id'):
+        return redirect('/user')
+    if session.get('user_id'):
+        id=session.get('user_id')
+    users=User.query.get(id)
+    if request.method == 'POST':
+        # get all input field name
+        fname=request.form.get('fname')
+        lname=request.form.get('lname')
+        email=request.form.get('email')
+        username=request.form.get('username')
+        edu=request.form.get('edu')
+        if fname =="" or lname=="" or email=="" or username=="" or edu=="":
+            flash('Please fill all the field','danger')
+            return redirect('/user/update-profile')
+        else:
+            session['username']=None
+            User.query.filter_by(id=id).update(dict(fname=fname,lname=lname,email=email,edu=edu,username=username))
+            db.session.commit()
+            session['username']=username
+            flash('Profile update Successfully','success')
+            return redirect('/user/dashboard')
+    else:
+        return render_template('user/update-profile.html',title="Update Profile",users=users)
 if __name__=="__main__":
     app.run(debug=True)
