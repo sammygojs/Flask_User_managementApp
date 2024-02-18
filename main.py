@@ -328,6 +328,14 @@ def generate_pdf_file():
     buffer.seek(0)
     return buffer
 
+# --------------Product------------------
+@app.route('/Product')
+def data():
+    productEmail = request.args.get('productId')
+    # print(productEmail)
+    userDetails = User().query.filter_by(email=productEmail).first()
+    # print(userDetails)
+    return render_template('user/product.html',users=userDetails)
 
 if __name__=="__main__":
     app.run(debug=True)
