@@ -4,7 +4,8 @@
     {% for user in usersList %}
     <div class="alert alert-{{category}}">
         <strong>{{user.email}}</strong>
-        <a href="/Product?productId={{user.email}}">View</a>
+        <!-- <a href="/Product?productId={{user.email}}">View</a> -->
+        <a href="/Product/{{user.email}}">View</a>
     </div>
     {% endfor %}
     {% endif %}

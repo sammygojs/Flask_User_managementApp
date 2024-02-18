@@ -329,11 +329,12 @@ def generate_pdf_file():
     return buffer
 
 # --------------Product------------------
-@app.route('/Product')
-def data():
-    productEmail = request.args.get('productId')
+@app.route('/Product/<productId>')
+def data(productId):
+    # productEmail = request.args.get('productId')
     # print(productEmail)
-    userDetails = User().query.filter_by(email=productEmail).first()
+    # userDetails = User().query.filter_by(email=productEmail).first()
+    userDetails = User().query.filter_by(email=productId).first()
     # print(userDetails)
     return render_template('user/product.html',users=userDetails)
 
