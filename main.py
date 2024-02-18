@@ -119,6 +119,24 @@ def adminGetAllUser():
         users=User.query.all()
         return render_template('admin/all-user.html',title='Approve User',users=users)
     
+# change admin password
+@app.route('/admin/change-admin-password',methods=["POST","GET"])
+def adminChangePassword():
+    admin=Admin.query.get(1)
+    if request.method == 'POST':
+        username=request.form.get('username')
+        password=request.form.get('password')
+        if username == "" or password=="":
+            flash('Please fill the field','danger')
+            return redirect('/admin/change-admin-password')
+        else:
+            Admin().query.filter_by(username=username).update(dict(password=bcrypt.generate_password_hash(password,10)))
+            db.session.commit()
+            flash('Admin Password update successfully','success')
+            return redirect('/admin/change-admin-password')
+    else:
+        return render_template('admin/admin-change-password.html',title='Admin Change Password',admin=admin)
+
 #---------------------user area---------------------
 # user dashboard
 @app.route('/user/dashboard')
@@ -128,7 +146,8 @@ def userDashboard():
     if session.get('user_id'):
         id=session.get('user_id')
         users=User().query.filter_by(id=id).first()
-        return render_template('user/dashboard.html',title="User Dashboard",users=users)
+        usersList=User.query.all()
+        return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
 
 @app.route('/user',methods=["POST","GET"])
 def userIndex():

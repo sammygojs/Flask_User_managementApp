@@ -1,0 +1,10 @@
+<div>
+    <h1>Product View</h1>
+    {% if usersList %}
+    {% for user in usersList %}
+    <div class="alert alert-{{category}}">
+        <strong>{{user.email}}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
