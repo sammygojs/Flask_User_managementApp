@@ -1,6 +1,8 @@
-from flask import Flask, flash ,render_template,request,redirect,session
+from flask import Flask, flash ,render_template,request,redirect,session,send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from io import BytesIO
+from reportlab.pdfgen import canvas
 app=Flask(__name__)
 app.config["SECRET_KEY"]='65b0b774279de460f1cc5c92'
 app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ums.sqlite"
@@ -147,6 +149,14 @@ def userDashboard():
         id=session.get('user_id')
         users=User().query.filter_by(id=id).first()
         usersList=User.query.all()
+
+        user_data.append({
+        'id': users.id,
+        'firstName': users.fname,
+        'lastName': users.lname,
+        'email': users.email
+    })
+        
         return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
 
 @app.route('/user',methods=["POST","GET"])
@@ -276,5 +286,48 @@ def userUpdateProfile():
             return redirect('/user/dashboard')
     else:
         return render_template('user/update-profile.html',title="Update Profile",users=users)
+
+# -------------printing methods------------
+user_data = []
+@app.route('/generate-pdf', methods=['GET'])
+def generate_pdf():
+    # if request.method == 'POST':
+    #     # Retrieve user input from the form
+    #     title = request.form.get('title')
+    #     author = request.form.get('author')
+    #     publication_year = request.form.get('publication_year')
+         
+        # Validate and store the user input
+        # if title and author and publication_year:
+    # user_data.append({
+    #     'title': "title",
+    #     'author': "author",
+    #     'publication_year': "publication_year"
+    # })
+ 
+    pdf_file = generate_pdf_file()
+    return send_file(pdf_file, as_attachment=True, download_name='user_details.pdf')
+ 
+def generate_pdf_file():
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+ 
+    # Create a PDF document
+    p.drawString(100, 750, "User details")
+ 
+    y = 700
+    for user in user_data:
+        p.drawString(100, y, f"User id: {user['id']}")
+        p.drawString(100, y - 20, f"First Name: {user['firstName']}")
+        p.drawString(100, y - 40, f"Last Name: {user['lastName']}")
+        y -= 60
+ 
+    p.showPage()
+    p.save()
+ 
+    buffer.seek(0)
+    return buffer
+
+
 if __name__=="__main__":
     app.run(debug=True)
