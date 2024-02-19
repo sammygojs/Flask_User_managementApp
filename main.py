@@ -1,4 +1,4 @@
-from flask import Flask, flash ,render_template,request,redirect,session,send_file
+from flask import Flask, flash ,render_template,request,redirect,session,send_file,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from io import BytesIO
@@ -23,6 +23,12 @@ class User(db.Model):
     edu=db.Column(db.String(255), nullable=False)
     password=db.Column(db.String(255), nullable=False)
     status=db.Column(db.Integer,default=1, nullable=False)
+
+    def serialize(self):
+        return {"id": self.id,
+                "fname": self.fname,
+                "lname": self.lname,
+                "email": self.email}
 
     def __repr__(self):
         return f'User("{self.id}","{self.fname}","{self.lname}","{self.email}","{self.edu}","{self.username}","{self.status}")'
@@ -226,6 +232,7 @@ def userLogout():
     if session.get('user_id'):
         session['user_id'] = None
         session['username'] = None
+        session['cart'] = None
         return redirect('/user')
 
 @app.route('/user/change-password',methods=["POST","GET"])
@@ -329,14 +336,85 @@ def generate_pdf_file():
     return buffer
 
 # --------------Product------------------
-@app.route('/Product/<productId>')
+@app.route('/Product/<int:productId>', methods=['GET','POST','DELETE'])
 def data(productId):
-    # productEmail = request.args.get('productId')
-    # print(productEmail)
-    # userDetails = User().query.filter_by(email=productEmail).first()
-    userDetails = User().query.filter_by(email=productId).first()
-    # print(userDetails)
-    return render_template('user/product.html',users=userDetails)
+    if request.method=='POST':
+        id=session.get('user_id')
+        users=User().query.filter_by(id=id).first()
+        productToBeAdded = User().query.filter_by(id=productId).first()
+        usersList=User.query.all()
+        if not session.get('cart'):
+            session['cart'] = [{"product": productToBeAdded.serialize(), "count":1}]
+            
+            return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
+        else:
+            productList = session['cart']
+            f=0
+
+            for item in productList:
+                if item['product']['id'] == productId:
+                    item['count'] += 1
+                    f=1
+    
+            if f==0:
+                # print("new product")
+                new_product = {
+                'count': 1,
+                'product': productToBeAdded.serialize()  
+                }
+                productList.append(new_product)
+
+            session['cart'] = productList
+            return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
+            
+    else:
+        userDetails = User().query.filter_by(id=productId).first()
+        return render_template('user/product.html',users=userDetails)
+
+@app.route('/cart',methods=['GET','POST'])
+def Cart():
+        if not session.get('cart'):
+            return render_template("user/cart.html")
+        else:
+            cart_data = session.get('cart')
+            return render_template("user/cart.html", cartData=cart_data)
+
+@app.route('/IncrCart/<int:productId>',methods=['GET','POST'])
+def IncrementCartValue(productId):
+    if request.method=='POST':
+        productList = session['cart']
+
+        for item in productList:
+            if item['product']['id'] == productId:
+                item['count'] += 1
+
+        session['cart'] = productList
+        cart_data = session.get('cart')
+        return render_template('user/cart.html', cartData=cart_data)
+
+
+@app.route('/DecrCart/<int:productId>',methods=['GET','POST'])
+def DecrementCartValue(productId):
+    if request.method=='POST':
+        productList = session['cart']
+
+        for item in productList:
+            if item['product']['id'] == productId:
+                if(item['count']==1):
+                    flash('Item Deleted','danger')
+                    productList=remove_product_by_id(productId)
+                else:
+                    item['count'] -= 1
+
+        session['cart'] = productList
+        cart_data = session.get('cart')
+        return render_template('user/cart.html', cartData=cart_data)
+            
+def remove_product_by_id(product_id):
+    data = session['cart']
+    data = [item for item in data if item['product']['id'] != product_id]
+    return data
+
 
 if __name__=="__main__":
     app.run(debug=True)
