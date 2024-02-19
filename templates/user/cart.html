@@ -26,9 +26,9 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>fname</th>
-                        <th>lname</th>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Price</th>
                     </tr>
                 </thead>
                 
@@ -36,8 +36,8 @@
                     {% for cart in cartData %}
                     <tr>
                         <td>{{cart.product.id}}</td>
-                        <td>{{cart.product.fname}}</td>
-                        <td>{{cart.product.lname}}</td>
+                        <td>{{cart.product.pname}}</td>
+                        <td>{{cart.product.price}}</td>
                         <td>
                             <form action="/IncrCart/{{cart.product.id}}" method="post" style="display: inline-block;">
                                 <button name="addQuantity" value="add">+</button>

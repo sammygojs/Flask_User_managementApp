@@ -12,6 +12,7 @@
     {% endif %}
     {% endwith %}
     {% include 'user/navbar.html' %}
+    {% if users %}
     <div class="container">
         <div class="my-2">
             <div class="table-responsive">
@@ -40,6 +41,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <a href="/cart">Cart</a>
     <button><a href="/generate-pdf">Print user details</a></button>
     <!-- Show products -->

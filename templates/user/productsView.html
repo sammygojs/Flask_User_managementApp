@@ -1,11 +1,10 @@
 <div>
     <h1>Products View</h1>
-    {% if usersList %}
-    {% for user in usersList %}
+    {% if productsList %}
+    {% for product in productsList %}
     <div class="alert alert-{{category}}">
-        <strong>{{user.email}}</strong>
-        <!-- <a href="/Product?productId={{user.email}}">View</a> -->
-        <a href="/Product/{{user.id}}">View</a>
+        <strong>{{product.pname}}</strong>
+        <a href="/Product/{{product.id}}">View</a>
     </div>
     {% endfor %}
     {% endif %}

@@ -42,13 +42,42 @@ class Admin(db.Model):
     def __repr__(self):
         return f'Admin("{self.username}","{self.id}")'
 
+# create product Class
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pname = db.Column(db.String(255), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    img = db.Column(db.String(255), nullable=False)
 
+    def __repr__(self):
+        return f"<Product(id={self.id}, pname='{self.pname}', price={self.price}, img='{self.img}')>"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "pname": self.pname,
+            "price": self.price,
+            "img": self.img
+        }
 
 # admin=Admin(username='admin',password=bcrypt.generate_password_hash('admin',10))
+mock_products = [
+    Product(pname='Product1', price=19.99, img='product1.jpg'),
+    Product(pname='Product2', price=29.99, img='product2.jpg'),
+    Product(pname='Product3', price=14.99, img='product3.jpg'),
+    Product(pname='Product4', price=24.99, img='product4.jpg'),
+    Product(pname='Product5', price=34.99, img='product5.jpg'),
+]
+
+
 
 #create table
 with app.app_context():
     db.create_all()
+
+    # for product in mock_products:
+    #     db.session.add(product)
+    
     # db.session.add(admin)
     # db.session.commit()
 
@@ -156,7 +185,9 @@ def userDashboard():
     if session.get('user_id'):
         id=session.get('user_id')
         users=User().query.filter_by(id=id).first()
-        usersList=User.query.all()
+        # usersList=User.query.all()
+        products=Product().query.all()
+        print(products)
 
         user_data.append({
         'id': users.id,
@@ -165,7 +196,7 @@ def userDashboard():
         'email': users.email
     })
         
-        return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
+        return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
 
 @app.route('/user',methods=["POST","GET"])
 def userIndex():
@@ -342,14 +373,15 @@ def generate_pdf_file():
 @app.route('/Product/<int:productId>', methods=['GET','POST','DELETE'])
 def data(productId):
     if request.method=='POST':
-        id=session.get('user_id')
-        users=User().query.filter_by(id=id).first()
-        productToBeAdded = User().query.filter_by(id=productId).first()
-        usersList=User.query.all()
+        userId=session.get('user_id')
+        userDetails=User().query.filter_by(id=userId).first()
+        products = Product().query.all()
+        productToBeAdded = Product().query.filter_by(id=productId).first()
+        # usersList=User.query.all()
         if not session.get('cart'):
             session['cart'] = [{"product": productToBeAdded.serialize(), "count":1}]
             
-            return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
+            return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
         else:
             productList = session['cart']
             f=0
@@ -368,11 +400,11 @@ def data(productId):
                 productList.append(new_product)
 
             session['cart'] = productList
-            return render_template('user/dashboard.html',title="User Dashboard",users=users,usersList=usersList)
+            return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
             
     else:
-        userDetails = User().query.filter_by(id=productId).first()
-        return render_template('user/product.html',users=userDetails)
+        product = Product().query.filter_by(id=productId).first()
+        return render_template('user/product.html',product=product)
 
 @app.route('/cart',methods=['GET','POST'])
 def Cart():
