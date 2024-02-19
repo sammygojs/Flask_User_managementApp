@@ -99,8 +99,10 @@ def adminLogout():
     if not session.get('admin_id'):
         return redirect('/admin')
     if session.get('admin_id'):
-        session['admin_id']=None
-        session['admin_name']=None
+        # session['admin_id']=None
+        # session['admin_name']=None
+        for key in list(session.keys()):
+            session.pop(key)
         return redirect('/')
 
 #admin approve user
@@ -230,9 +232,11 @@ def userLogout():
         return redirect('/user')
 
     if session.get('user_id'):
-        session['user_id'] = None
-        session['username'] = None
-        session['cart'] = None
+        # session['user_id'] = None
+        # session['username'] = None
+        # session['cart'] = None
+        for key in list(session.keys()):
+            session.pop(key)
         return redirect('/user')
 
 @app.route('/user/change-password',methods=["POST","GET"])
@@ -253,7 +257,6 @@ def userChangePassword():
                db.session.commit()
                flash('Password Change Successfully','success')
 
-            #    return render_template('/user/change-password',users=users)
                return redirect('/user/change-password')
             else:
                 flash('Invalid Email','danger')
