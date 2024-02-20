@@ -1,4 +1,4 @@
-from flask import Flask, flash ,render_template,request,redirect,session,send_file,jsonify
+from flask import Flask, flash ,render_template,request,redirect,session,send_file,url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from io import BytesIO
@@ -22,7 +22,7 @@ class User(db.Model):
     username=db.Column(db.String(255), nullable=False)
     edu=db.Column(db.String(255), nullable=False)
     password=db.Column(db.String(255), nullable=False)
-    status=db.Column(db.Integer,default=1, nullable=False)
+    status=db.Column(db.Integer,default=0, nullable=False)
 
     def serialize(self):
         return {"id": self.id,
@@ -47,33 +47,56 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pname = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    img = db.Column(db.String(255), nullable=False)
+    # img = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
-        return f"<Product(id={self.id}, pname='{self.pname}', price={self.price}, img='{self.img}')>"
+        return f"<Product(id={self.id}, pname='{self.pname}', price={self.price})>"
     
     def serialize(self):
         return {
             "id": self.id,
             "pname": self.pname,
             "price": self.price,
-            "img": self.img
+            # "img": self.img
+        }
+
+class Cart(db.Model):
+    cart_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f"Cart(cart_id={self.cart_id}, user_id={self.user_id}, product_id={self.product_id}, quantity={self.quantity})"
+
+    def serialize(self):
+        return {
+            'cart_id': self.cart_id,
+            'user_id': self.user_id,
+            'product_id': self.product_id,
+            'quantity': self.quantity
         }
 
 # admin=Admin(username='admin',password=bcrypt.generate_password_hash('admin',10))
-mock_products = [
-    Product(pname='Product1', price=19.99, img='product1.jpg'),
-    Product(pname='Product2', price=29.99, img='product2.jpg'),
-    Product(pname='Product3', price=14.99, img='product3.jpg'),
-    Product(pname='Product4', price=24.99, img='product4.jpg'),
-    Product(pname='Product5', price=34.99, img='product5.jpg'),
-]
+# mock_products = [
+#     Product(pname='Product1', price=19.99, img='product1.jpg'),
+#     Product(pname='Product2', price=29.99, img='product2.jpg'),
+#     Product(pname='Product3', price=14.99, img='product3.jpg'),
+#     Product(pname='Product4', price=24.99, img='product4.jpg'),
+#     Product(pname='Product5', price=34.99, img='product5.jpg'),
+# ]
 
 
 
 #create table
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
+    # adminToBeDel = db.session.query(Admin).filter_by(id=2).first()
+    # Admin.query.filter_by(id=2).delete
+    # db.session.delete(adminToBeDel)
+    # db.session.commit()
+
+    # print(db.session.query(Admin).all())
 
     # for product in mock_products:
     #     db.session.add(product)
@@ -81,12 +104,19 @@ with app.app_context():
     # db.session.add(admin)
     # db.session.commit()
 
+    # Delete all rows from the User table
+    # db.session.query(Product).drop()
+
+    # # Commit the changes to the database
+    # db.session.commit()
+    # print(db.session.query(Admin).all())
+
 #main index login
 @app.route('/')
 def index():
     return render_template('index.html',title="")
 
-# admin loign
+# admin login
 @app.route('/admin',methods=["POST","GET"])
 def adminIndex():
     # chect the request is post or not
@@ -176,6 +206,37 @@ def adminChangePassword():
     else:
         return render_template('admin/admin-change-password.html',title='Admin Change Password',admin=admin)
 
+#admin add user
+@app.route('/admin/add-user',methods=["GET","POST"])
+def addUser():
+    if request.method=="GET":
+        return render_template("admin/addUser.html")
+    else:
+        # get all input field name
+        fname=request.form.get('fname')
+        lname=request.form.get('lname')
+        email=request.form.get('email')
+        username=request.form.get('username')
+        edu=request.form.get('edu')
+        password=request.form.get('password')
+        # check all the field is filled are not
+        if fname =="" or lname=="" or email=="" or password=="" or username=="" or edu=="":
+            flash('Please fill all the field','danger')
+            return redirect('/admin/add-user')
+        else:
+            is_email=User().query.filter_by(email=email).first()
+            if is_email:
+                flash('Email already Exist','danger')
+                return redirect('/admin/add-user')
+            else:
+                hash_password=bcrypt.generate_password_hash(password,10)
+                user=User(fname=fname,lname=lname,email=email,password=hash_password,edu=edu,username=username)
+                db.session.add(user)
+                db.session.commit()
+                flash('Account has been created but you have to approve it to activate it','success')
+                return redirect('/admin/add-user') 
+
+
 #---------------------user area---------------------
 # user dashboard
 @app.route('/user/dashboard')
@@ -187,7 +248,13 @@ def userDashboard():
         users=User().query.filter_by(id=id).first()
         # usersList=User.query.all()
         products=Product().query.all()
-        print(products)
+        # print(products)
+        if(session.get('cart')):
+            cartSize = session['cart']
+        else:
+            cartSize=[]
+        # print(cartSize,type(cartSize))
+        # print('Cart size: ',len(cartSize))
 
         user_data.append({
         'id': users.id,
@@ -196,7 +263,7 @@ def userDashboard():
         'email': users.email
     })
         
-        return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
+        return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products,cartSize=len(cartSize))
 
 @app.route('/user',methods=["POST","GET"])
 def userIndex():
@@ -328,6 +395,8 @@ def userUpdateProfile():
     else:
         return render_template('user/update-profile.html',title="Update Profile",users=users)
 
+
+
 # -------------printing methods------------
 user_data = []
 @app.route('/generate-pdf', methods=['GET'])
@@ -374,14 +443,15 @@ def generate_pdf_file():
 def data(productId):
     if request.method=='POST':
         userId=session.get('user_id')
-        userDetails=User().query.filter_by(id=userId).first()
-        products = Product().query.all()
+        # userDetails=User().query.filter_by(id=userId).first()
+        # products = Product().query.all()
         productToBeAdded = Product().query.filter_by(id=productId).first()
         # usersList=User.query.all()
         if not session.get('cart'):
             session['cart'] = [{"product": productToBeAdded.serialize(), "count":1}]
             
-            return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
+            # return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
+            return redirect(url_for('userIndex')) 
         else:
             productList = session['cart']
             f=0
@@ -400,8 +470,9 @@ def data(productId):
                 productList.append(new_product)
 
             session['cart'] = productList
-            return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
-            
+            # return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
+            # return redirect('http://localhost:5000/user/dashboard')   
+            return redirect(url_for('userIndex')) 
     else:
         product = Product().query.filter_by(id=productId).first()
         return render_template('user/product.html',product=product)
@@ -424,8 +495,9 @@ def IncrementCartValue(productId):
                 item['count'] += 1
 
         session['cart'] = productList
-        cart_data = session.get('cart')
-        return render_template('user/cart.html', cartData=cart_data)
+        # cart_data = session.get('cart')
+        # return render_template('user/cart.html', cartData=cart_data)
+        return redirect(url_for('Cart')) 
 
 
 @app.route('/DecrCart/<int:productId>',methods=['GET','POST'])
@@ -442,14 +514,19 @@ def DecrementCartValue(productId):
                     item['count'] -= 1
 
         session['cart'] = productList
-        cart_data = session.get('cart')
-        return render_template('user/cart.html', cartData=cart_data)
+        # cart_data = session.get('cart')
+        return redirect(url_for('Cart'))
+        # return render_template('user/cart.html', cartData=cart_data)
             
 def remove_product_by_id(product_id):
     data = session['cart']
     data = [item for item in data if item['product']['id'] != product_id]
     return data
 
+@app.route('/admin/add-product', methods=['GET'])
+def addProduct():
+    if request.method=='GET':
+        return render_template('admin/addProduct.html')
 
 if __name__=="__main__":
     app.run(debug=True)
