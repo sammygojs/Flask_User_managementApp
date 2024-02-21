@@ -278,7 +278,7 @@ def addproduct():
                 flash('Product has been created','success')
                 return redirect('/admin/add-product')
             
-# user dashboard
+# Admin: change user password
 @app.route('/admin/changeUserPassword/<int:user_id>',methods=['POST','GET'])
 def changeUserPassword(user_id):
     userEntity = User().query.filter_by(id=user_id).first()
@@ -303,6 +303,31 @@ def changeUserPassword(user_id):
                 flash('Invalid Email','danger')
                 return redirect('/admin/changeUserPassword/'+str(user_id))
             
+# Admin: user update profile
+@app.route('/admin/updateUserProfileAdmin/<int:user_id>', methods=["POST","GET"])
+def updateUserProfileAdmin(user_id):
+    # print(user_id)
+    userEntity = User().query.filter_by(id=user_id).first()
+    if request.method=='GET':
+        return render_template("admin/admin-update-profile.html",users=userEntity)
+        # print("get")
+    if request.method == 'POST':
+        # get all input field name
+        fname=request.form.get('fname')
+        lname=request.form.get('lname')
+        email=request.form.get('email')
+        username=request.form.get('username')
+        edu=request.form.get('edu')
+        if fname =="" or lname=="" or email=="" or username=="" or edu=="":
+            flash('Please fill all the field','danger')
+            return redirect('/admin/updateUserProfileAdmin/'+str(user_id))
+        else:
+            User.query.filter_by(id=user_id).update(dict(fname=fname,lname=lname,email=email,edu=edu,username=username))
+            db.session.commit()
+            flash('Profile update Successfully','success')
+            return redirect('/admin/updateUserProfileAdmin/'+str(user_id))
+
+
 
 #---------------------user area---------------------
 # user dashboard
