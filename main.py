@@ -85,27 +85,39 @@ class Cart(db.Model):
 #     Product(pname='Product4', price=24.99, img='product4.jpg'),
 #     Product(pname='Product5', price=34.99, img='product5.jpg'),
 # ]
+    
+mock_carts = [
+    Cart(user_id=1, product_id=1, quantity=2),
+    Cart(user_id=1, product_id=2, quantity=1),
+    Cart(user_id=2, product_id=3, quantity=3),
+    Cart(user_id=2, product_id=43, quantity=1)
+]
 
 
 
 #create table
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
+    # cartNode = db.session.query(Cart).filter_by(product_id=43).first()
+    # print(cartNode)
+    # cart_to_delete = db.session.query(Cart).filter_by(cart_id=43).first()
+    # print(cart_to_delete)
+    # print(Cart().query.all())
     # adminToBeDel = db.session.query(Admin).filter_by(id=2).first()
     # Admin.query.filter_by(id=2).delete
-    # db.session.delete(adminToBeDel)
+    # db.session.delete(cart_to_delete)
     # db.session.commit()
-
-    # print(db.session.query(Admin).all())
-
-    # for product in mock_products:
-    #     db.session.add(product)
+    # print(cart_to_delete)
+    # print(db.session.query(Cart).filter_by(product_id=1).all())
+    # db.session.commit()
+    # for cart in mock_carts:
+    #     db.session.add(cart)
     
     # db.session.add(admin)
     # db.session.commit()
 
     # Delete all rows from the User table
-    # db.session.query(Product).drop()
+    # db.session.query(Product).delete
 
     # # Commit the changes to the database
     # db.session.commit()
@@ -249,10 +261,10 @@ def userDashboard():
         # usersList=User.query.all()
         products=Product().query.all()
         # print(products)
-        if(session.get('cart')):
-            cartSize = session['cart']
-        else:
-            cartSize=[]
+        # if(session.get('cart')):
+        #     cartSize = session['cart']
+        # else:
+        #     cartSize=[]
         # print(cartSize,type(cartSize))
         # print('Cart size: ',len(cartSize))
 
@@ -263,7 +275,7 @@ def userDashboard():
         'email': users.email
     })
         
-        return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products,cartSize=len(cartSize))
+        return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
 
 @app.route('/user',methods=["POST","GET"])
 def userIndex():
@@ -445,83 +457,156 @@ def data(productId):
         userId=session.get('user_id')
         # userDetails=User().query.filter_by(id=userId).first()
         # products = Product().query.all()
-        productToBeAdded = Product().query.filter_by(id=productId).first()
+        # productToBeAdded = Product().query.filter_by(id=productId).first()
+        # cartNode = db.session.query(Cart).filter_by(product_id=productId).all()
+        cart_to_update = Cart().query.filter_by(user_id=userId,product_id=productId).first()
+        # cart_to_update = db.session.query(Cart).filter_by(product_id=productId).first()
+        print("cart_to_update",cart_to_update)
+        # print("cartNode",cartNode)
         # usersList=User.query.all()
-        if not session.get('cart'):
-            session['cart'] = [{"product": productToBeAdded.serialize(), "count":1}]
-            
-            # return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
+        # if not session.get('cart'):
+        #     session['cart'] = [{"product": productToBeAdded.serialize(), "count":1}]
+        #     cartNode = Cart(user_id=userId, product_id=productId, quantity=1)
+        #     db.session.add(cartNode)
+        #     # return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
+        #     return redirect(url_for('userIndex')) 
+        # else:
+        #     productList = session['cart']
+
+        #     f=0
+        #     for item in productList:
+        #         if item['product']['id'] == productId:
+        #             item['count'] += 1
+        #             f=1
+    
+        #     if f==0:
+        #         # print("new product")
+        #         new_product = {
+        #         'count': 1,
+        #         'product': productToBeAdded.serialize()  
+        #         }
+        #         productList.append(new_product)
+
+        #     session['cart'] = productList
+        #     cartNode = db.session.query(Cart).filter_by(product_id=productId).first()
+        #     if cartNode:
+                
+        #     else:
+        #         cartNode = Cart(user_id=userId, product_id=productId, quantity=1)
+        #         db.session.add(cartNode)
+
+        #     # return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
+        #     # return redirect('http://localhost:5000/user/dashboard')   
+        #     return redirect(url_for('userIndex')) 
+        # with app.app_context():
+    # db.create_all()
+        
+        # cartNode = Cart.query.filter_by(product_id=productId).all()
+        if cart_to_update:
+            cart_to_update.quantity+=1
+            # print(cart_to_update.quantity)
+            #if product exists in cart db -> increment the cart value
+            # cartToBeAdded = cartNode.serialize()
+            # cartToBeAdded['quantity'] +=1
+            # print("carToBeAdded",cartToBeAdded)
+            # print(type(cartToBeAdded))
+            # newCart = Cart(cartToBeAdded['cart_id'],cartToBeAdded['user_id'],cartToBeAdded['product_id'],cartToBeAdded['quantity'])
+            db.session.add(cart_to_update)
+            db.session.commit()
             return redirect(url_for('userIndex')) 
         else:
-            productList = session['cart']
-            f=0
-
-            for item in productList:
-                if item['product']['id'] == productId:
-                    item['count'] += 1
-                    f=1
-    
-            if f==0:
-                # print("new product")
-                new_product = {
-                'count': 1,
-                'product': productToBeAdded.serialize()  
-                }
-                productList.append(new_product)
-
-            session['cart'] = productList
-            # return render_template('user/dashboard.html',title="User Dashboard",users=userDetails,productsList=products)
-            # return redirect('http://localhost:5000/user/dashboard')   
+            #product not in cart db -> create a new value
+            print("new cart")
+            cartToBeAdded = Cart(user_id=userId, product_id=productId, quantity=1)
+            print(cartToBeAdded)
+            db.session.add(cartToBeAdded)
+            db.session.commit()
             return redirect(url_for('userIndex')) 
     else:
         product = Product().query.filter_by(id=productId).first()
         return render_template('user/product.html',product=product)
 
 @app.route('/cart',methods=['GET','POST'])
-def Cart():
-        if not session.get('cart'):
-            return render_template("user/cart.html")
-        else:
-            cart_data = session.get('cart')
-            return render_template("user/cart.html", cartData=cart_data)
+def CartIndex():
+        userId=session.get('user_id')
+        print("userId",userId)
+        cartItems = Cart().query.filter_by(user_id=userId).all()
+        productList = []
+        for cart in cartItems:
+            productList.append(Product().query.filter_by(id=cart.product_id).first())
+        print("cartItems",cartItems)
+        print("productList",productList)
+        # return '<h1>Hello</h1>'
+        # return render_template("user/cart.html", cartData=cartItems, productList=productList)
+        return render_template("user/cart.html", data = zip(cartItems,productList))
+        # if not session.get('cart'):
+        #     return render_template("user/cart.html")
+        # else:
+        #     cart_data = session.get('cart')
+        #     return render_template("user/cart.html", cartData=cart_data)
 
 @app.route('/IncrCart/<int:productId>',methods=['GET','POST'])
 def IncrementCartValue(productId):
     if request.method=='POST':
-        productList = session['cart']
+        # productList = session['cart']
 
-        for item in productList:
-            if item['product']['id'] == productId:
-                item['count'] += 1
+        # for item in productList:
+        #     if item['product']['id'] == productId:
+        #         item['count'] += 1
 
-        session['cart'] = productList
+        # session['cart'] = productList
         # cart_data = session.get('cart')
         # return render_template('user/cart.html', cartData=cart_data)
-        return redirect(url_for('Cart')) 
+        userId=session.get('user_id')
+        cart_to_update = Cart().query.filter_by(user_id=userId,product_id=productId).first()
+        # print("cart_to_update",cart_to_update)
+        # db.session.delete(cart_to_update)
+        cart_to_update.quantity+=1
+        # print("cart_to_update",cart_to_update)
+        db.session.add(cart_to_update)
+        db.session.commit()
+        return redirect(url_for('CartIndex')) 
 
 
 @app.route('/DecrCart/<int:productId>',methods=['GET','POST'])
 def DecrementCartValue(productId):
     if request.method=='POST':
-        productList = session['cart']
+        userId=session.get('user_id')
+        cart_to_update = Cart().query.filter_by(user_id=userId,product_id=productId).first()
+        # print("cart_to_update",cart_to_update)
+        # db.session.delete(cart_to_update)
+        if(cart_to_update.quantity==1):
+            db.session.delete(cart_to_update)
+            # cart_to_update.quantity-=1
+            # db.session.add(cart_to_update)
+            db.session.commit()
+            flash('Item Deleted','danger')
+            return redirect(url_for('CartIndex'))
+        cart_to_update.quantity-=1
+        # print("cart_to_update",cart_to_update)
+        db.session.add(cart_to_update)
+        db.session.commit()
+        # flash()
+        return redirect(url_for('CartIndex')) 
+        # productList = session['cart']
 
-        for item in productList:
-            if item['product']['id'] == productId:
-                if(item['count']==1):
-                    flash('Item Deleted','danger')
-                    productList=remove_product_by_id(productId)
-                else:
-                    item['count'] -= 1
+        # for item in productList:
+        #     if item['product']['id'] == productId:
+        #         if(item['count']==1):
+        #             flash('Item Deleted','danger')
+        #             productList=remove_product_by_id(productId)
+        #         else:
+        #             item['count'] -= 1
 
-        session['cart'] = productList
-        # cart_data = session.get('cart')
-        return redirect(url_for('Cart'))
-        # return render_template('user/cart.html', cartData=cart_data)
+        # session['cart'] = productList
+        # # cart_data = session.get('cart')
+        # return redirect(url_for('Cart'))
+        # # return render_template('user/cart.html', cartData=cart_data)
             
-def remove_product_by_id(product_id):
-    data = session['cart']
-    data = [item for item in data if item['product']['id'] != product_id]
-    return data
+# def remove_product_by_id(product_id):
+#     data = session['cart']
+#     data = [item for item in data if item['product']['id'] != product_id]
+#     return data
 
 @app.route('/admin/add-product', methods=['GET'])
 def addProduct():

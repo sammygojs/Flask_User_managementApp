@@ -42,7 +42,9 @@
         </div>
     </div>
     {% endif %}
-    <a href="/cart">Cart</a>
+    <a href="/cart">Cart
+        <!-- ({{cartSize}}) -->
+    </a>
     <button><a href="/generate-pdf">Print user details</a></button>
     <!-- Show products -->
     {% include 'user/productsView.html' %}

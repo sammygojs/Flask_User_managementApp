@@ -19,31 +19,30 @@
             {% endwith %}
     </div>
 
-    {% if cartData %}
+    {% if data %}
     
     <div class="my-2">
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <!-- <th>Id</th> -->
                         <th>Name</th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 
                 <tbody>
-                    {% for cart in cartData %}
+                    {% for cart,product in data %}
                     <tr>
-                        <td>{{cart.product.id}}</td>
-                        <td>{{cart.product.pname}}</td>
-                        <td>{{cart.product.price}}</td>
+                        <td>{{product.pname}}</td>
+                        <td>{{product.price}}</td>
                         <td>
-                            <form action="/IncrCart/{{cart.product.id}}" method="post" style="display: inline-block;">
+                            <form action="/IncrCart/{{product.id}}" method="post" style="display: inline-block;">
                                 <button name="addQuantity" value="add">+</button>
                             </form>
-                            <strong style="display: inline-block;">count: {{cart.count}}</strong>
-                            <form action="/DecrCart/{{cart.product.id}}" method="post" style="display: inline-block;">
+                            <strong style="display: inline-block;">count: {{cart.quantity}}</strong>
+                            <form action="/DecrCart/{{product.id}}" method="post" style="display: inline-block;">
                                 <button name="subtractQuantity" value="sub">-</button>
                             </form>
                         </td>
