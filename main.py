@@ -47,7 +47,6 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pname = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    # img = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
         return f"<Product(id={self.id}, pname='{self.pname}', price={self.price})>"
@@ -57,7 +56,6 @@ class Product(db.Model):
             "id": self.id,
             "pname": self.pname,
             "price": self.price,
-            # "img": self.img
         }
 
 class Cart(db.Model):
@@ -97,12 +95,21 @@ mock_carts = [
 
 #create table
 with app.app_context():
-    db.create_all()
+    # db.create_all()
+    # db.drop_all()
     # cartNode = db.session.query(Cart).filter_by(product_id=43).first()
     # print(cartNode)
     # cart_to_delete = db.session.query(Cart).filter_by(cart_id=43).first()
     # print(cart_to_delete)
-    # print(Cart().query.all())
+    # admin = Admin(username="admin",password="admin")
+    # pw_hash = bcrypt.generate_password_hash("admin", 10).decode('utf-8') 
+    # admin = Admin(username="admin",password=pw_hash)
+    # db.session.add(admin)
+    # admins=Admin().query.filter_by(username="admin").first()
+    # print(admins)
+    # print(bcrypt.check_password_hash(admins.password, 'admin'))
+    # Admin().query.delete()
+    # print(Admin().query.all())
     # adminToBeDel = db.session.query(Admin).filter_by(id=2).first()
     # Admin.query.filter_by(id=2).delete
     # db.session.delete(cart_to_delete)
@@ -114,7 +121,7 @@ with app.app_context():
     #     db.session.add(cart)
     
     # db.session.add(admin)
-    # db.session.commit()
+    db.session.commit()
 
     # Delete all rows from the User table
     # db.session.query(Product).delete
@@ -143,7 +150,7 @@ def adminIndex():
         else:
             # login admin by username 
             admins=Admin().query.filter_by(username=username).first()
-            if admins and bcrypt.check_password_hash(admins.password,password):
+            if admins and bcrypt.check_password_hash(admins.password, password):
                 session['admin_id']=admins.id
                 session['admin_name']=admins.username
                 flash('Login Successfully','success')
@@ -248,6 +255,54 @@ def addUser():
                 flash('Account has been created but you have to approve it to activate it','success')
                 return redirect('/admin/add-user') 
 
+#admin add product
+@app.route('/admin/add-product',methods=["GET","POST"])
+def addproduct():
+    if request.method=="GET":
+        return render_template("admin/addProduct.html")
+    else:
+        pname=request.form.get('pname')
+        price=request.form.get('price')
+        if pname =="" or price=="":
+            flash('Please fill all the field','danger')
+            return redirect('/admin/add-product')
+        else:
+            is_product=Product().query.filter_by(pname=pname).first()
+            if is_product:
+                flash('Product name already Exist','danger')
+                return redirect('/admin/add-product')
+            else:
+                product = Product(pname=pname,price=price)
+                db.session.add(product)
+                db.session.commit()
+                flash('Product has been created','success')
+                return redirect('/admin/add-product')
+            
+# user dashboard
+@app.route('/admin/changeUserPassword/<int:user_id>',methods=['POST','GET'])
+def changeUserPassword(user_id):
+    userEntity = User().query.filter_by(id=user_id).first()
+    if request.method=="GET":
+        return render_template("admin/user-change-password.html",users=userEntity)
+    else:
+        email=request.form.get('email')
+        password=request.form.get('password')
+        if email == "" or password == "":
+            flash('Please fill the field','danger')
+            return redirect('/admin/changeUserPassword/'+str(user_id))
+        else:
+            users=User.query.filter_by(email=email).first()
+            if users:
+               hash_password=bcrypt.generate_password_hash(password,10)
+               User.query.filter_by(email=email).update(dict(password=hash_password))
+               db.session.commit()
+               flash('Password Change Successfully','success')
+
+               return redirect('/admin/changeUserPassword/'+str(user_id))
+            else:
+                flash('Invalid Email','danger')
+                return redirect('/admin/changeUserPassword/'+str(user_id))
+            
 
 #---------------------user area---------------------
 # user dashboard
@@ -538,7 +593,8 @@ def CartIndex():
         print("productList",productList)
         # return '<h1>Hello</h1>'
         # return render_template("user/cart.html", cartData=cartItems, productList=productList)
-        return render_template("user/cart.html", data = zip(cartItems,productList))
+        cartSize = len(cartItems)
+        return render_template("user/cart.html", data = zip(cartItems,productList), cartSize=cartSize)
         # if not session.get('cart'):
         #     return render_template("user/cart.html")
         # else:
