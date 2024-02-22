@@ -3,3 +3,4 @@ flask-session
 flask-sqlalchemy
 flask-bcrypt
 reportlab
+build

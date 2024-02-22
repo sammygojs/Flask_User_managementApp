@@ -95,6 +95,7 @@ mock_carts = [
 
 #create table
 with app.app_context():
+    # User().query.filter_by(id=1).update(dict(status=0))
     # db.create_all()
     # db.drop_all()
     # cartNode = db.session.query(Cart).filter_by(product_id=43).first()
@@ -109,7 +110,7 @@ with app.app_context():
     # print(admins)
     # print(bcrypt.check_password_hash(admins.password, 'admin'))
     # Admin().query.delete()
-    # print(Admin().query.all())
+    # print(User().query.all())
     # adminToBeDel = db.session.query(Admin).filter_by(id=2).first()
     # Admin.query.filter_by(id=2).delete
     # db.session.delete(cart_to_delete)
@@ -122,7 +123,7 @@ with app.app_context():
     
     # db.session.add(admin)
     db.session.commit()
-
+    # print(User().query.all())
     # Delete all rows from the User table
     # db.session.query(Product).delete
 
@@ -191,6 +192,17 @@ def adminApprove(id):
     User().query.filter_by(id=id).update(dict(status=1))
     db.session.commit()
     flash('Approve Successfully','success')
+    return redirect('/admin/get-all-user')
+    # return render_template('admin/all-user.html',title='Approve User',users=users)
+
+#admin disapprove user
+@app.route('/admin/disapprove-user/<int:id>')
+def adminDisapprove(id):
+    if not session.get('admin_id'):
+        return redirect('/admin')
+    User().query.filter_by(id=id).update(dict(status=0))
+    db.session.commit()
+    flash('Disapprove Successfully','success')
     return redirect('/admin/get-all-user')
     # return render_template('admin/all-user.html',title='Approve User',users=users)
 

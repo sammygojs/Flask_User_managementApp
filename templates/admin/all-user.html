@@ -35,11 +35,13 @@
                         <td>{{user.edu}}</td>
                         <td>
                             {% if user.status == 1 %}
-                            Approved
+                                <button class="btn btn-success disapprove-btn" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
+                                    <a href="/admin/disapprove-user/{{user.id}}">Approved</a>
+                                </button>
                             {% else %}
-                            <a href="/admin/approve-user/{{user.id}}">
-                                <button class="btn btn-warning">Approve</button>
-                            </a>
+                                <button class="btn btn-warning approve-btn" id="{{user.id}}" style="min-width: 100px;" data-user-id="{{user.id}}">
+                                    <a href="/admin/approve-user/{{user.id}}">Approve</a>
+                                </button>
                             {% endif %}
                             <a href="/admin/changeUserPassword/{{user.id}}">
                                 <button class="btn">Change password</button>
@@ -56,3 +58,4 @@
     </div>
 </div>
 {% endblock content %}
+

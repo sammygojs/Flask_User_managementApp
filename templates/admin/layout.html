@@ -15,4 +15,65 @@
     {%block content%} {%endblock content%}
     
 </body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- <script>
+    $(document).ready(function () {
+        $('.approve-btn').on('click', function () {
+            var userId = $(this).data('user-id');
+            var url = '/admin/approve-user/' + userId;
+            // var targetDiv = $('.user-container'); 
+            // var targetDiv = $('.approve-btn'); 
+            var targetDiv = $('#'+userId); 
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    // Handle success response
+                    targetDiv.html("Approved");
+                    targetDiv.removeClass("btn-warning")
+                    targetDiv.removeClass("approve-btn")
+                    targetDiv.addClass("btn-success")
+                    targetDiv.addClass("disapprove-btn")
+                    // console.log('User approved successfully');
+                },
+                error: function (error) {
+                    // Handle error response
+                    console.error('Error approving user', error);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('.disapprove-btn').on('click', function () {
+            var userId = $(this).data('user-id');
+            var url = '/admin/disapprove-user/' + userId;
+            // var targetDiv = $('.user-container'); 
+            // var targetDiv = $('.disapprove-btn'); 
+            var targetDiv = $('#'+userId); 
+            // var link = 
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    // Handle success response
+                    targetDiv.html("Approve");
+                    // targetDiv.replaceWith()
+                    targetDiv.addClass("btn-warning")
+                    targetDiv.addClass("approve-btn")
+                    targetDiv.removeClass("btn-success")
+                    targetDiv.removeClass("disapprove-btn")
+                    
+                    // console.log('User approved successfully');
+                },
+                error: function (error) {
+                    // Handle error response
+                    console.error('Error disapproving user', error);
+                }
+            });
+        });
+    });
+</script> -->
 </html>
