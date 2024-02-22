@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product: {{product.id}}</title>
-</head>
-<body>
-    <h1>ID: {{product.id}}</h1>
-    <h1>Product name: {{product.pname}}</h1>
-    <h1>Price: {{product.price}}</h1>
-    <form action="" method="post">
-        <button name="addToCart" value="value">Add to cart</button>
-    </form>
-    <a href="/user/dashboard">Go back</a>
-</body>
-</html>
+{% extends "user/layout.html"%}
+
+{% block content %}
+{% include 'user/navbar.html' %}
+<div class="container">
+    <div>
+        <h1>ID: {{product.id}}</h1>
+        <h1>Product name: {{product.pname}}</h1>
+        <h1>Price: {{product.price}}</h1>
+        <form action="" method="post">
+            <button name="addToCart" value="value">Add to cart</button>
+        </form>
+        <a class="" href="/user/dashboard">Go back</a>
+    </div>
+</div>
+{% endblock content %}

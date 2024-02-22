@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <title>Admin: update user info</title>
-</head>
-<body>
+{% extends "admin/layout.html"%}
+
+{% block content %}
+{% include 'admin/navbar.html' %}
     <div class="container">
         <h4 class="text-center my-3">
             Admin: User Profile Update
@@ -52,10 +47,10 @@
                             <button class="btn btn-success">Change profile</button>
                         </form>
                     </div>
+                    <a class="text-center" href="/admin/dashboard">Click to go to dashboard</a>
                 </div>
             </div>
         </div>
-        <a href="/admin/dashboard">Click to go to dashboard</a>
+        
     </div>
-</body>
-</html>
+    {% endblock content %}

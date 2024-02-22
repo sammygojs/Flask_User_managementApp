@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <title>Cart</title>
-</head>
-<body>
+{% extends "user/layout.html"%}
+
+{% block content %}
+{% include 'user/navbar.html' %}
+    <div class="container">
     <div>
     {% with messages=get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -62,9 +58,5 @@
         </div>
     </div>
     {% endif %}  
-
-    
-    
-    
-</body>
-</html>
+</div>
+{%endblock content%}

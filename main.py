@@ -176,13 +176,13 @@ def adminDashboard():
 @app.route('/admin/logout')
 def adminLogout():
     if not session.get('admin_id'):
+        print('not session found')
         return redirect('/admin')
     if session.get('admin_id'):
-        # session['admin_id']=None
-        # session['admin_name']=None
+        print('session found')
         for key in list(session.keys()):
             session.pop(key)
-        return redirect('/')
+        return redirect('/admin')
 
 #admin approve user
 @app.route('/admin/approve-user/<int:id>')

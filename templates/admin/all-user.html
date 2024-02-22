@@ -1,19 +1,20 @@
 {% extends "admin/layout.html"%}
 
 {% block content %}
+{% include 'admin/navbar.html' %}
 <div class="container">
-    {% include 'admin/navbar.html' %}
+    
     <div class="my-2">
         <form action="" method="POST" style="width:100%">
             <div class="d-flex align-items-center">
-                <input type="text" name="search" id="search" class="form-control my-1 w-50">
+                <input type="text" name="search" id="search" class="form-control my-1 w-50" placeholder="Search users">
                 <button type="submit" class="btn btn-success " style="margin-left:10px;">Search</button>
             </div>
         </form>
     </div>
     <div class="my-2">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -35,13 +36,17 @@
                         <td>{{user.edu}}</td>
                         <td>
                             {% if user.status == 1 %}
+                            <a href="/admin/disapprove-user/{{user.id}}">
                                 <button class="btn btn-success disapprove-btn" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
-                                    <a href="/admin/disapprove-user/{{user.id}}">Approved</a>
+                                    Approved
                                 </button>
+                            </a>
                             {% else %}
+                            <a href="/admin/approve-user/{{user.id}}">
                                 <button class="btn btn-warning approve-btn" id="{{user.id}}" style="min-width: 100px;" data-user-id="{{user.id}}">
-                                    <a href="/admin/approve-user/{{user.id}}">Approve</a>
+                                    Approve
                                 </button>
+                            </a>
                             {% endif %}
                             <a href="/admin/changeUserPassword/{{user.id}}">
                                 <button class="btn">Change password</button>
