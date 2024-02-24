@@ -500,11 +500,12 @@ def userUpdateProfile():
         return render_template('user/update-profile.html',title="Update Profile",users=users)
 
 
-
 # -------------printing methods------------
 user_data = []
 @app.route('/generate-pdf', methods=['GET'])
 def generate_pdf():
+    userId = session['user_id']
+    users = User().query.filter_by(id=userId).first()
     # if request.method == 'POST':
     #     # Retrieve user input from the form
     #     title = request.form.get('title')
@@ -518,6 +519,14 @@ def generate_pdf():
     #     'author': "author",
     #     'publication_year': "publication_year"
     # })
+    user_data.clear()
+    
+    user_data.append({
+        'id': users.id,
+        'firstName': users.fname,
+        'lastName': users.lname,
+        'email': users.email
+    })
  
     pdf_file = generate_pdf_file()
     return send_file(pdf_file, as_attachment=True, download_name='user_details.pdf')
@@ -541,6 +550,7 @@ def generate_pdf_file():
  
     buffer.seek(0)
     return buffer
+
 
 # --------------Product------------------
 @app.route('/Product/<int:productId>', methods=['GET','POST','DELETE'])

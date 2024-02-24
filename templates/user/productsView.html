@@ -1,19 +1,21 @@
 
 <div class="container">
-    <h1>Products</h1>
-    <div>
+    <!-- <h1>Products</h1> -->
+    <!-- <div> -->
     <div class="row">
         {% if productsList %}
         {% for product in productsList %}
-        <div class="col-xl-6 my-2 col-lg-6 col-sm-12">
+        <div class="col-xl-4 my-2 col-lg-4 col-sm-12">
             <div class="d-flex p-3 justify-content-between align-items-center">
-                <h2>{{product.pname}}</h2>
-                <a href="/Product/{{product.id}}">View</a>
+                <!-- <h2>{{product.pname}}</h2> -->
+                <h2>
+                <a href="/Product/{{product.id}}">{{product.pname}}</a>
+                </h2>
             </div>
         </div>
         {% endfor %}
         {% endif %}
     </div>
-    </div>
+    <!-- </div> -->
     
 </div>
