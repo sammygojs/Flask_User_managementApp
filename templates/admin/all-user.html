@@ -2,65 +2,76 @@
 
 {% block content %}
 {% include 'admin/navbar.html' %}
-<div class="container">
-    
-    <div class="my-2">
-        <form action="" method="POST" style="width:100%">
-            <div class="d-flex align-items-center">
-                <input type="text" name="search" id="search" class="form-control my-1 w-50" placeholder="Search users">
-                <button type="submit" class="btn btn-success " style="margin-left:10px;">Search</button>
-            </div>
-        </form>
-    </div>
-    <div class="my-2">
-        <div class="table-responsive">
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Edu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{user.id}}</td>
-                        <td>{{user.fname}}</td>
-                        <td>{{user.lname}}</td>
-                        <td>{{user.username}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.edu}}</td>
-                        <td>
-                            {% if user.status == 1 %}
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    <!-- Product name -->
+                    Email
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+                <!-- <th scope="col" class="px-6 py-3">
+                    Category
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Price
+                </th> -->
+                <th scope="col" class="px-6 py-3">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in users %}
+            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{user.email}}
+                </th>
+                <td class="px-6 py-4">
+                    {{user.fname}} {{user.lname}}
+                </td>
+                <!-- <td class="px-6 py-4">
+                    Laptop
+                </td>
+                <td class="px-6 py-4">
+                    $2999
+                </td> -->
+                <td class="px-6 py-4">
+                    {% if user.status == 1 %}
                             <a href="/admin/disapprove-user/{{user.id}}">
-                                <button class="btn btn-success disapprove-btn" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
+                                <button class="font-normal h-8 border-2 border-green-600 text-green-600 rounded-2xl hover:bg-green-600 hover:text-white dark:text-blue-500" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
                                     Approved
                                 </button>
                             </a>
                             {% else %}
                             <a href="/admin/approve-user/{{user.id}}">
-                                <button class="btn btn-warning approve-btn" id="{{user.id}}" style="min-width: 100px;" data-user-id="{{user.id}}">
+                                <button class="font-normal h-8 border-2 border-red-600 text-red-600 rounded-2xl hover:bg-red-600 hover:text-white dark:text-blue-500" id="{{user.id}}" style="min-width: 100px;" data-user-id="{{user.id}}">
                                     Approve
                                 </button>
                             </a>
                             {% endif %}
                             <a href="/admin/changeUserPassword/{{user.id}}">
-                                <button class="btn">Change password</button>
+                                <button class="btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Change password</button>
                             </a>
                             <a href="/admin/updateUserProfileAdmin/{{user.id}}">
-                                <button class="btn">Update profile</button>
+                                <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Update profile</button>
                             </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+<script>
+    var allUsers = document.getElementById("allUsers");
+    allUsers.classList.remove('text-gray-700')
+    allUsers.classList.add('text-blue-700');
+</script>
 {% endblock content %}
 

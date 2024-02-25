@@ -4,8 +4,41 @@
     {% include 'admin/navbar.html' %}
 <!-- </div> -->
 
+<div class=" p-8 mx-8 rounded">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <!-- <a href="/user" class="nav-link text-blue-700" > -->
+      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl font-sans">
+        <!-- <h3>User login</h3> <br> -->
+        <h2>Total User: </h2>
+        <h4>{{totalUser}}</h4>
+      </div>
+    <!-- </a> -->
+    <!-- <a href="/user/signup" class="nav-link text-blue-700"> -->
+      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl">
+        <h2>Approved User: </h2>
+        <h4>{{totalApprove}}</h4>
+      </div>
+      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl">
+        <h2>Pending Users: </h2>
+        <h4>{{NotTotalApprove}}</h4>
+      </div>
+    <!-- </a> -->
+    <!-- <a href="/admin" class="nav-link text-blue-700"> -->
+      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl">
+        <!-- <h2>User</h2> -->
+        <a href="/admin/add-user">Add user</a>
+      </div>
+    <!-- </a> -->
+    <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl">
+        <!-- <h2>Product</h2> -->
+        <a href="/admin/add-product">Add product</a>
+      </div>
+    </div>
+  </div>
+
+
 <div class="container">
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-xl-6 my-2 col-lg-6 col-sm-12">
             <div class="bg-success d-flex p-3 justify-content-between align-items-center">
                 <h2>Total User</h2>
@@ -29,13 +62,18 @@
                 <h2>User</h2>
                 <a href="/admin/add-user">Add user</a>
             </div>
-        </div>
-        <div class="col-xl-6 my-2 col-lg-6 col-sm-12">
+        </div> -->
+        <!-- <div class="col-xl-6 my-2 col-lg-6 col-sm-12">
             <div class="bg-warning d-flex p-3 justify-content-between align-items-center">
                 <h2>Product</h2>
                 <a href="/admin/add-product">Add Product</a>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
+<script>
+  var dashboard = document.getElementById("dashboard");
+  dashboard.classList.remove('text-gray-700')
+  dashboard.classList.add('text-blue-700');
+</script>
 {% endblock content %}
