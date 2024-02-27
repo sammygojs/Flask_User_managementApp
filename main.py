@@ -349,13 +349,13 @@ def userDashboard():
         id=session.get('user_id')
         users=User().query.filter_by(id=id).first()
         if("asc" == request.args.get('sortBy')):
-            products=Product().query.order_by(asc(Product.price))
+            products=Product().query.order_by(asc(Product.price)).paginate(page=1,per_page=1)
             return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
         if("desc" == request.args.get('sortBy')):
-            products=Product().query.order_by(desc(Product.price))
+            products=Product().query.order_by(desc(Product.price)).paginate(page=1,per_page=1)
             return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
         else:
-            products=Product().query.all()
+            products=Product().query.paginate(page=1,per_page=1)
         return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
 
 @app.route('/user',methods=["POST","GET"])
