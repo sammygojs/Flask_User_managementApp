@@ -510,10 +510,10 @@ def userUpdateProfile():
 
 # -------------printing methods------------
 user_data = []
-@app.route('/generate-pdf', methods=['GET'])
-def generate_pdf():
-    userId = session['user_id']
-    users = User().query.filter_by(id=userId).first()
+@app.route('/generate-pdf/<int:user_id>', methods=['GET'])
+def generate_pdf(user_id):
+    # userId = session['user_id']
+    users = User().query.filter_by(id=user_id).first()
     # if request.method == 'POST':
     #     # Retrieve user input from the form
     #     title = request.form.get('title')

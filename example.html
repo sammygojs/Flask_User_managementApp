@@ -1,13 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flowbite Flask</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1 class="text-blue-600">Hello, Flask!</h1>
+
+<body class="bg-gray-200">
+    <div class=" p-8 mx-8 rounded">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <a href="/user" class="nav-link" >
+          <div class="flex items-center justify-center rounded-md bg-white shadow p-4 h-36 font-semibold text-3xl font-sans">
+            <!-- <h3>User login</h3> <br> -->
+            User Contribution
+          </div>
+        </a>
+        <a href="/user/signup" class="nav-link">
+          <div class="flex items-center justify-center rounded-md bg-white shadow p-4 h-36 font-semibold text-3xl">
+            Carbon Offset
+          </div>
+        </a>
+        <a href="/admin" class="nav-link">
+          <div class="flex items-center justify-center rounded-md bg-white shadow p-4 h-36 font-semibold text-3xl">
+            Until Neutral
+          </div>
+        </a>
+        </div>
+      </div>
+    
+
+    <!-- Section 2: Filter and Product Grid -->
+    <div class="px-8 rounded-2xl mx-8 flex">
+        <!-- Left Part: Filter Section -->
+        <div class="w-1/4 p-4 bg-white mr-4">
+            <h2 class="text-lg font-semibold mb-4">Filters</h2>
+            <!-- Add filter options here, e.g., sorting by price -->
+            <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700">Sort by:</label>
+                <select class="mt-1 p-2 border rounded w-full">
+                    <option value="price">Price</option>
+                    <!-- Add other sorting options if needed -->
+                </select>
+            </div>
+            <!-- Add other filter options as needed -->
+        </div>
+
+        <!-- Right Part: Product Grid -->
+        <div class="w-3/4 p-4 rounded-2xl bg-white">
+            <h2 class="text-lg font-semibold mb-4">Product Grid</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <!-- Sample product block -->
+                <div class="bg-gray-300 p-4 rounded">
+                    <h3 class="text-lg font-semibold mb-2">Product Name</h3>
+                    <img src="product_image.jpg" alt="Product Image" class="mb-2 rounded">
+                    <!-- Add other product details as needed -->
+                </div>
+                <div class="bg-gray-300 p-4 rounded">
+                    <h3 class="text-lg font-semibold mb-2">Product Name</h3>
+                    <img src="product_image.jpg" alt="Product Image" class="mb-2 rounded">
+                    <!-- Add other product details as needed -->
+                </div>
+                <div class="bg-gray-300 p-4 rounded">
+                    <h3 class="text-lg font-semibold mb-2">Product Name</h3>
+                    <img src="product_image.jpg" alt="Product Image" class="mb-2 rounded">
+                    <!-- Add other product details as needed -->
+                </div>
+                <div class="bg-gray-300 p-4 rounded">
+                    <h3 class="text-lg font-semibold mb-2">Product Name</h3>
+                    <img src="product_image.jpg" alt="Product Image" class="mb-2 rounded">
+                    <!-- Add other product details as needed -->
+                </div>
+                <div class="bg-gray-300 p-4 rounded">
+                    <h3 class="text-lg font-semibold mb-2">Product Name</h3>
+                    <img src="product_image.jpg" alt="Product Image" class="mb-2 rounded">
+                    <!-- Add other product details as needed -->
+                </div>
+                <!-- Repeat for each product block -->
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>

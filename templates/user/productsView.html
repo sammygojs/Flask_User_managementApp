@@ -1,21 +1,31 @@
-
-<div class="container">
-    <!-- <h1>Products</h1> -->
-    <!-- <div> -->
-    <div class="row">
+<div class="px-8 rounded-2xl mx-8 flex">
+    <div class="w-1/4 p-4 bg-white mr-4">
+        <h2 class="text-lg font-semibold mb-4">Filters</h2>
+        <div class="mb-2">
+            <label class="block text-sm font-medium text-gray-700">Sort by:</label>
+            <select class="mt-1 p-2 border rounded w-full">
+                <option value="price">Price</option>
+            </select>
+        </div>
+    </div>
+    <div class="w-3/4 p-4 rounded-2xl bg-white">
+        <h2 class="text-lg font-semibold mb-4">Product Grid</h2>
+        <div class="grid grid-cols-3 gap-4">
         {% if productsList %}
         {% for product in productsList %}
-        <div class="col-xl-4 my-2 col-lg-4 col-sm-12">
-            <div class="d-flex p-3 justify-content-between align-items-center">
-                <!-- <h2>{{product.pname}}</h2> -->
-                <h2>
-                <a href="/Product/{{product.id}}">{{product.pname}}</a>
-                </h2>
-            </div>
+        <div class="bg-gray-300 p-4 rounded">
+            <a href="/Product/{{product.id}}">
+                <h2 class="text-lg font-semibold mb-2">{{product.pname}}</h2>
+                <h4 class="text-lg font-semibold mb-2">GBP {{product.price}}</h4>
+            </a>
         </div>
         {% endfor %}
         {% endif %}
     </div>
-    <!-- </div> -->
-    
 </div>
+    </div>
+
+
+
+
+    

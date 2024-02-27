@@ -45,7 +45,7 @@
                 <td class="px-6 py-4">
                     {% if user.status == 1 %}
                             <a href="/admin/disapprove-user/{{user.id}}">
-                                <button class="font-normal h-8 border-2 border-green-600 text-green-600 rounded-2xl hover:bg-green-600 hover:text-white dark:text-blue-500" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
+                                <button class="font-normal h-8 border-2 border-green-600 text-green-600 rounded-2xl hover:bg-green-600 hover:text-white hover:text- dark:text-blue-500" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
                                     Approved
                                 </button>
                             </a>
@@ -61,6 +61,9 @@
                             </a>
                             <a href="/admin/updateUserProfileAdmin/{{user.id}}">
                                 <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Update profile</button>
+                            </a>
+                            <a href="/generate-pdf/{{user.id}}">
+                                <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Print User Details</button>
                             </a>
                 </td>
             </tr>
