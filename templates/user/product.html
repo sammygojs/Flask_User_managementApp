@@ -5,6 +5,7 @@
 <div class="container">
     <div>
         <h1>ID: {{product.id}}</h1>
+        <img src="{{ url_for('static', filename='images/' + product.pname +'.png') }}" class="rounded-full w-44 h-44 bg-slate-500 border-red-500 border-2" alt="">
         <h1>Product name: {{product.pname}}</h1>
         <h1>Price: {{product.price}}</h1>
         <form action="" method="post">

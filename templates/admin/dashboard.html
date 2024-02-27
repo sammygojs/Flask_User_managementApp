@@ -3,22 +3,24 @@
 <!-- <div class="container"> -->
     {% include 'admin/navbar.html' %}
 <!-- </div> -->
-
-<div class=" p-8 mx-8 rounded">
+<!-- <div
+>
+<img src="{{url_for('static',filename='SolarPanels.jpg')}}" alt=""> -->
+<div style="background-image: url('/static/SolarPanels.jpg'); background-repeat: no-repeat; background-size: cover; min-height:auto;" class=" p-8 mx-8 rounded h-screen">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         <!-- <a href="/user" class="nav-link text-blue-700" > -->
-      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl font-sans">
+      <div class="flex items-center justify-center rounded-md bg-slate-100 opacity-75 shadow p-4 h-36 font-semibold text-3xl font-sans">
         <!-- <h3>User login</h3> <br> -->
         <h2>Total User: </h2>
         <h4>{{totalUser}}</h4>
       </div>
     <!-- </a> -->
     <!-- <a href="/user/signup" class="nav-link text-blue-700"> -->
-      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl">
+      <div class="flex items-center justify-center rounded-md bg-slate-100 opacity-75 shadow p-4 h-36 font-semibold text-3xl">
         <h2>Approved User: </h2>
         <h4>{{totalApprove}}</h4>
       </div>
-      <div class="flex items-center justify-center rounded-md bg-slate-100 shadow p-4 h-36 font-semibold text-3xl">
+      <div class="flex items-center justify-center rounded-md bg-slate-100 opacity-75 shadow p-4 h-36 font-semibold text-3xl">
         <h2>Pending Users: </h2>
         <h4>{{NotTotalApprove}}</h4>
       </div>
@@ -35,8 +37,7 @@
       </div>
     </div>
   </div>
-
-
+<!-- </div> -->
 <div class="container">
     <!-- <div class="row">
         <div class="col-xl-6 my-2 col-lg-6 col-sm-12">

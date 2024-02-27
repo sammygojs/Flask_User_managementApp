@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from io import BytesIO
 from reportlab.pdfgen import canvas
+import os
 app=Flask(__name__)
 app.config["SECRET_KEY"]='65b0b774279de460f1cc5c92'
 app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ums.sqlite"
@@ -47,15 +48,17 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pname = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    photoURI = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
-        return f"<Product(id={self.id}, pname='{self.pname}', price={self.price})>"
+        return f"<Product(id={self.id}, pname='{self.pname}', price={self.price}, photoURI={self.photoURI})>"
     
     def serialize(self):
         return {
             "id": self.id,
             "pname": self.pname,
             "price": self.price,
+            "photoURI": self.photoURI
         }
 
 class Cart(db.Model):
@@ -97,14 +100,16 @@ mock_carts = [
 with app.app_context():
     # User().query.filter_by(id=1).update(dict(status=0))
     # db.create_all()
+    # Product().query.delete()
+    # print(Product().query.all())
     # db.drop_all()
     # cartNode = db.session.query(Cart).filter_by(product_id=43).first()
     # print(cartNode)
     # cart_to_delete = db.session.query(Cart).filter_by(cart_id=43).first()
     # print(cart_to_delete)
-    # admin = Admin(username="admin1",password="admin")
-    # pw_hash = bcrypt.generate_password_hash("123", 10).decode('utf-8') 
-    # admin = Admin(username="admin1",password=pw_hash)
+    # admin = Admin(username="admin",password="admin")
+    # pw_hash = bcrypt.generate_password_hash("admin", 10).decode('utf-8') 
+    # admin = Admin(username="admin",password=pw_hash)
     # db.session.add(admin)
     # admins=Admin().query.filter_by(username="admin1").first()
     # print(admins)
@@ -275,7 +280,9 @@ def addproduct():
     else:
         pname=request.form.get('pname')
         price=request.form.get('price')
-        if pname =="" or price=="":
+        photo=request.files['photo']
+        if pname =="" or price=="" or photo==None:
+            print(photo)
             flash('Please fill all the field','danger')
             return redirect('/admin/add-product')
         else:
@@ -284,7 +291,8 @@ def addproduct():
                 flash('Product name already Exist','danger')
                 return redirect('/admin/add-product')
             else:
-                product = Product(pname=pname,price=price)
+                photo.save(os.path.join(app.root_path, 'static', 'images', pname+'.png'))
+                product = Product(pname=pname,price=price,photoURI=pname)
                 db.session.add(product)
                 db.session.commit()
                 flash('Product has been created','success')
