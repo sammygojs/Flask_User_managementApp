@@ -1,5 +1,6 @@
 from flask import Flask, flash ,render_template,request,redirect,session,send_file,url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc, asc
 from flask_bcrypt import Bcrypt
 from io import BytesIO
 from reportlab.pdfgen import canvas
@@ -78,23 +79,12 @@ class Cart(db.Model):
             'quantity': self.quantity
         }
 
-# admin=Admin(username='admin',password=bcrypt.generate_password_hash('admin',10))
-# mock_products = [
-#     Product(pname='Product1', price=19.99, img='product1.jpg'),
-#     Product(pname='Product2', price=29.99, img='product2.jpg'),
-#     Product(pname='Product3', price=14.99, img='product3.jpg'),
-#     Product(pname='Product4', price=24.99, img='product4.jpg'),
-#     Product(pname='Product5', price=34.99, img='product5.jpg'),
-# ]
-    
 mock_carts = [
     Cart(user_id=1, product_id=1, quantity=2),
     Cart(user_id=1, product_id=2, quantity=1),
     Cart(user_id=2, product_id=3, quantity=3),
     Cart(user_id=2, product_id=43, quantity=1)
 ]
-
-
 
 #create table
 with app.app_context():
@@ -358,23 +348,14 @@ def userDashboard():
     if session.get('user_id'):
         id=session.get('user_id')
         users=User().query.filter_by(id=id).first()
-        # usersList=User.query.all()
-        products=Product().query.all()
-        # print(products)
-        # if(session.get('cart')):
-        #     cartSize = session['cart']
-        # else:
-        #     cartSize=[]
-        # print(cartSize,type(cartSize))
-        # print('Cart size: ',len(cartSize))
-
-        user_data.append({
-        'id': users.id,
-        'firstName': users.fname,
-        'lastName': users.lname,
-        'email': users.email
-    })
-        
+        if("asc" == request.args.get('sortBy')):
+            products=Product().query.order_by(asc(Product.price))
+            return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
+        if("desc" == request.args.get('sortBy')):
+            products=Product().query.order_by(desc(Product.price))
+            return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
+        else:
+            products=Product().query.all()
         return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
 
 @app.route('/user',methods=["POST","GET"])
