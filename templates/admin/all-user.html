@@ -3,60 +3,63 @@
 {% block content %}
 {% include 'admin/navbar.html' %}
 
+<div class="flex">
+    <!-- New column -->
+    {% include 'admin/sideBar.html' %}
+    <div class="flex-auto relative overflow-x-auto shadow-md sm:rounded-lg h-screen">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Email
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg bg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Email
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Actions
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for user in users %}
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{user.email}}
-                </th>
-                <td class="px-6 py-4">
-                    {{user.fname}} {{user.lname}}
-                </td>
-                <td class="px-6 py-4">
-                    {% if user.status == 1 %}
-                            <a href="/admin/disapprove-user/{{user.id}}">
-                                <button class="font-normal h-8 border-2 border-green-600 text-green-600 rounded-2xl hover:bg-green-600 hover:text-white hover:text- dark:text-blue-500" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
-                                    Approved
-                                </button>
-                            </a>
-                            {% else %}
-                            <a href="/admin/approve-user/{{user.id}}">
-                                <button class="font-normal h-8 border-2 border-red-600 text-red-600 rounded-2xl hover:bg-red-600 hover:text-white dark:text-blue-500" id="{{user.id}}" style="min-width: 100px;" data-user-id="{{user.id}}">
-                                    Approve
-                                </button>
-                            </a>
-                            {% endif %}
-                            <a href="/admin/changeUserPassword/{{user.id}}">
-                                <button class="btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Change password</button>
-                            </a>
-                            <a href="/admin/updateUserProfileAdmin/{{user.id}}">
-                                <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Update profile</button>
-                            </a>
-                            <a href="/generate-pdf/{{user.id}}">
-                                <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Print User Details</button>
-                            </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <tbody>
+                {% for user in users %}
+                <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{user.email}}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{user.fname}} {{user.lname}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if user.status == 1 %}
+                                <a href="/admin/disapprove-user/{{user.id}}">
+                                    <button class="font-normal h-8 border-2 border-green-600 text-green-600 rounded-2xl hover:bg-green-600 hover:text-white hover:text- dark:text-blue-500" id={{user.id}} style="min-width: 100px;" data-user-id="{{user.id}}" >
+                                        Approved
+                                    </button>
+                                </a>
+                                {% else %}
+                                <a href="/admin/approve-user/{{user.id}}">
+                                    <button class="font-normal h-8 border-2 border-red-600 text-red-600 rounded-2xl hover:bg-red-600 hover:text-white dark:text-blue-500" id="{{user.id}}" style="min-width: 100px;" data-user-id="{{user.id}}">
+                                        Approve
+                                    </button>
+                                </a>
+                                {% endif %}
+                                <a href="/admin/changeUserPassword/{{user.id}}">
+                                    <button class="btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Change password</button>
+                                </a>
+                                <a href="/admin/updateUserProfileAdmin/{{user.id}}">
+                                    <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Update profile</button>
+                                </a>
+                                <a href="/generate-pdf/{{user.id}}">
+                                    <button class="btn btn font-normal h-8 border-gray-200 border-2 rounded-2xl w-32">Print User Details</button>
+                                </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>
     var allUsers = document.getElementById("allUsers");

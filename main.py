@@ -8,7 +8,7 @@ import random
 import os
 app=Flask(__name__)
 app.config["SECRET_KEY"]='65b0b774279de460f1cc5c92'
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ums.sqlite"
+app.config['SQLALCHEMY_DATABASE_URI']='mysql://root:@localhost/ums'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.config["SESSION_PERMANENT"]=False
 app.config["SESSION_TYPE"]='filesystem'
@@ -102,13 +102,14 @@ mock_products = [
     Product(pname="Product 12", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
 ]
 
+
 #create table
 with app.app_context():
     # for data in mock_products:
         # product = Product(data)
         # db.session.add(data)
     # User().query.filter_by(id=1).update(dict(status=0))
-    # db.create_all()
+    db.create_all()
     # Product().query.delete()
     # print(Product().query.all())
     # db.drop_all()

@@ -1,19 +1,38 @@
-<div class="px-8 rounded-2xl mx-8 flex">
-    <div class="w-1/4 p-4 bg-white mr-4">
-        <h2 class="text-lg font-semibold mb-4">Filters</h2>
-        <div class="mb-2">
-            <select onchange="window.location.href=this.value" id="countries" class="font-semibold bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option class="font-semibold" value="" selected disabled>Sort By Price</option>
-                <option class="font-semibold" value="{{ url_for('userDashboard', page=1, sortBy='asc') }}">Sort Ascending</option>
-                <option class="font-semibold" value="{{ url_for('userDashboard', page=1, sortBy='desc') }}">Sort Descending</option>
-            </select>
-        </div>
+<div class="flex-auto shadow w-3/4">
+    <div class="flex flex-row">
+        <a href="#" class="block w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Contribution</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">$560</p>
+        </a>
+         <a href="#" class="block w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Carbon Offset Achieved</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">24 CO2 Tonnes</p>
+        </a>
+        <a href="#" class="block w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Offset to Neutral</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">8 CO2 Tonnes</p>
+        </a>
     </div>
-    <div class="w-3/4 p-4 rounded-2xl bg-white">
-        <h2 class="text-lg font-semibold mb-4">Product Grid</h2>
+    
+
+    <div class="rounded-2xl flex">
+    
+    <div class="w-full p-4 bg-white">
+        <!-- <h2 class="text-lg font-semibold mb-4">Product Grid</h2> -->
+        
+        <div class="w-1/4 p-4 bg-white">
+            <h2 class="text-lg font-semibold mb-4">Filters</h2>
+            <div class="mb-2">
+                <select onchange="window.location.href=this.value" id="countries" class="font-semibold bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option class="font-semibold" value="" selected disabled>Sort By Price</option>
+                    <option class="font-semibold" value="{{ url_for('userDashboard', page=1, sortBy='asc') }}">Sort Ascending</option>
+                    <option class="font-semibold" value="{{ url_for('userDashboard', page=1, sortBy='desc') }}">Sort Descending</option>
+                </select>
+            </div>
+        </div>
         <div class="grid grid-cols-3 gap-4">
-        {% if productsList %}
-        {% for product in productsList.items %}
+            {% if productsList %}
+            {% for product in productsList.items %}
         <div class="bg-gray-300 p-4 rounded">
             <a href="/Product/{{product.id}}">
                 <h2 class="text-lg font-semibold mb-2">{{product.pname}}</h2>
@@ -55,7 +74,6 @@
     </ul>
     </div>
 </div>
-
 </div>
 
 

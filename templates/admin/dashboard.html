@@ -6,7 +6,9 @@
 <!-- <div
 >
 <img src="{{url_for('static',filename='SolarPanels.jpg')}}" alt=""> -->
-<div style="background-image: url('/static/SolarPanels.jpg'); background-repeat: no-repeat; background-size: cover; min-height:auto;" class=" p-8 rounded h-screen">
+<div class="flex">
+  {% include 'admin/sideBar.html' %}
+<div class="flex-auto p-8 rounded h-screen shadow-md">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         <!-- <a href="/user" class="nav-link text-blue-700" > -->
       <div class="flex items-center justify-center rounded-md bg-slate-100 opacity-75 shadow p-4 h-36 font-semibold text-3xl font-sans">
@@ -37,9 +39,10 @@
       </div>
     </div>
   </div>
-<!-- </div> -->
+</div>
+<!-- </div> 
 <div class="container">
-    <!-- <div class="row">
+    <div class="row">
         <div class="col-xl-6 my-2 col-lg-6 col-sm-12">
             <div class="bg-success d-flex p-3 justify-content-between align-items-center">
                 <h2>Total User</h2>
@@ -69,12 +72,12 @@
                 <h2>Product</h2>
                 <a href="/admin/add-product">Add Product</a>
             </div>
-        </div> -->
+        </div> 
     </div>
-</div>
+</div>-->
 <script>
   var dashboard = document.getElementById("dashboard");
-  dashboard.classList.remove('text-gray-700')
+  // dashboard.classList.remove('text-gray-700')
   dashboard.classList.add('text-blue-700');
 </script>
 {% endblock content %}

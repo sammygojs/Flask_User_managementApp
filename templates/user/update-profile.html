@@ -51,7 +51,10 @@
         </div>
     </div>
 </div> -->
-<section class="dark:bg-gray-900">
+
+<div class="flex">
+    {% include 'user/sidebar.html' %}
+<section class="dark:bg-gray-900 flex-auto shadow">
     
     
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto my-20 lg:py-0 ">
@@ -118,4 +121,9 @@
         </div>
     </div>
   </section>
+  <script>
+    var dashboard = document.getElementById("updateProfile");
+    // dashboard.classList.remove('text-gray-700')
+    dashboard.classList.add('text-blue-700');
+  </script>
 {% endblock content %}
