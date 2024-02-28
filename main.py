@@ -4,6 +4,7 @@ from sqlalchemy import desc, asc
 from flask_bcrypt import Bcrypt
 from io import BytesIO
 from reportlab.pdfgen import canvas
+import random
 import os
 app=Flask(__name__)
 app.config["SECRET_KEY"]='65b0b774279de460f1cc5c92'
@@ -86,8 +87,26 @@ mock_carts = [
     Cart(user_id=2, product_id=43, quantity=1)
 ]
 
+mock_products = [
+    Product(pname="Product 1", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 2", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 3", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 4", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 5", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 6", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 7", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 8", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 9", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 10", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 11", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+    Product(pname="Product 12", price=random.uniform(10.0, 100.0), photoURI='https://example.com/photo1.jpg'),
+]
+
 #create table
 with app.app_context():
+    # for data in mock_products:
+        # product = Product(data)
+        # db.session.add(data)
     # User().query.filter_by(id=1).update(dict(status=0))
     # db.create_all()
     # Product().query.delete()
@@ -341,22 +360,28 @@ def updateUserProfileAdmin(user_id):
 
 #---------------------user area---------------------
 # user dashboard
+        
 @app.route('/user/dashboard')
-def userDashboard():
+@app.route('/user/dashboard/<int:page>')
+def userDashboard(page=1,sortBy='asc'):
     if not session.get('user_id'):
         return redirect('/user')
     if session.get('user_id'):
+        # per_page = 1
         id=session.get('user_id')
-        users=User().query.filter_by(id=id).first()
-        if("asc" == request.args.get('sortBy')):
-            products=Product().query.order_by(asc(Product.price)).paginate(page=1,per_page=1)
-            return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
-        if("desc" == request.args.get('sortBy')):
-            products=Product().query.order_by(desc(Product.price)).paginate(page=1,per_page=1)
-            return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
+        sort_option = request.args.get('sortBy', default='asc')
+        user=User().query.filter_by(id=id).first()
+        # products=Product().query.order_by(asc(Product.price)).paginate(page=page,per_page=9)
+        if sort_option == 'desc':
+            print("desc called")
+            products = Product.query.order_by(desc(Product.price)).paginate(page=page, per_page=9)
+            return render_template('user/dashboard.html',title="User Dashboard",users=user,productsList=products)
+        if sort_option == 'asc':
+            products = Product.query.order_by(asc(Product.price)).paginate(page=page, per_page=9)
+            return render_template('user/dashboard.html',title="User Dashboard",users=user,productsList=products)
         else:
-            products=Product().query.paginate(page=1,per_page=1)
-        return render_template('user/dashboard.html',title="User Dashboard",users=users,productsList=products)
+            products = Product.query.paginate(page=page, per_page=9)
+            return render_template('user/dashboard.html',title="User Dashboard",users=user,productsList=products)
 
 @app.route('/user',methods=["POST","GET"])
 def userIndex():

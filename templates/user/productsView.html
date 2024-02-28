@@ -1,31 +1,19 @@
-
-
 <div class="px-8 rounded-2xl mx-8 flex">
     <div class="w-1/4 p-4 bg-white mr-4">
         <h2 class="text-lg font-semibold mb-4">Filters</h2>
         <div class="mb-2">
-            <!-- <label class="block text-sm font-medium text-gray-700">Sort by:</label> -->
-            <a href="dashboard?sortBy=desc">Sort by DSC</a><br>
-            <a href="dashboard">Sort by ASC</a>
-            <!-- <select class="mt-1 p-2 border rounded w-full">
-                <a href="user/dashboard?sortBy=asc">
-                    <option value="price">Price by ASC</option>
-                </a>
-                <a href="user/dashboard?sortBy=desc">
-                    <option value="price">Price by DSC</option>
-                </a>
-            </select> -->
+            <select onchange="window.location.href=this.value" id="countries" class="font-semibold bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option class="font-semibold" value="" selected disabled>Sort By Price</option>
+                <option class="font-semibold" value="{{ url_for('userDashboard', page=1, sortBy='asc') }}">Sort Ascending</option>
+                <option class="font-semibold" value="{{ url_for('userDashboard', page=1, sortBy='desc') }}">Sort Descending</option>
+            </select>
         </div>
-        
-          
-
-        
     </div>
     <div class="w-3/4 p-4 rounded-2xl bg-white">
         <h2 class="text-lg font-semibold mb-4">Product Grid</h2>
         <div class="grid grid-cols-3 gap-4">
         {% if productsList %}
-        {% for product in productsList %}
+        {% for product in productsList.items %}
         <div class="bg-gray-300 p-4 rounded">
             <a href="/Product/{{product.id}}">
                 <h2 class="text-lg font-semibold mb-2">{{product.pname}}</h2>
@@ -35,8 +23,40 @@
         {% endfor %}
         {% endif %}
     </div>
-</div>
+    <div class="flex mt-10 font-semibold items-center justify-center">
+        <ul class="flex space-x-4">
+        {% if productsList.has_prev %}
+        <li>
+            <a href="{{ url_for('userDashboard', page=productsList.prev_num) }}">Previous</a>
+        </li>
+        {% endif %}
+        {% for page_num in productsList.iter_pages() %}
+        {% if page_num %}
+        {% if page_num != productsList.page %}
+        <li>
+            <a href="{{ url_for('userDashboard', page=page_num) }}">{{ page_num }}</a>
+        </li>
+        {% else %}
+        <li class="active">
+            <a href="#" class="underline">{{ page_num }}</a>
+        </li>
+        {% endif %}
+        {% else %}
+        <li>
+            <span class="ellipsis">…</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if productsList.has_next %}
+        <li>
+            <a href="{{ url_for('userDashboard', page=productsList.next_num) }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
     </div>
+</div>
+
+</div>
 
 
 
