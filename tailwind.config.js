@@ -7,7 +7,10 @@ module.exports = {
       "./node_modules/flowbite/**/*.js"
   ],
   theme: {
-    extend: {},
+    colors: {
+      'y-bg': '#FFF7B5',
+      'y-text': '#808080',
+    },
   },
   plugins: [
     require("flowbite/plugin")

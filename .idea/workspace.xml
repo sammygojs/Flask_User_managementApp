@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9b5c698b-65d2-41e4-bdae-09026b4d4329" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/change-password.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/change-password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/productsView.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/productsView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/sideBar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/sideBar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/update-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/update-profile.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2d2ivk6R6Qyd6IC6Dei6rNiqrib" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/akoli/Desktop/acq22sha/Team",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9b5c698b-65d2-41e4-bdae-09026b4d4329" name="Changes" comment="" />
+      <created>1709212806845</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709212806845</updated>
+      <workItem from="1709212807949" duration="87000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
