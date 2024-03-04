@@ -10,6 +10,7 @@ app=Flask(__name__)
 app.config["SECRET_KEY"]='65b0b774279de460f1cc5c92'
 app.config['SQLALCHEMY_DATABASE_URI']='mysql://root:@localhost/ums'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+
 app.config["SESSION_PERMANENT"]=False
 app.config["SESSION_TYPE"]='filesystem'
 db=SQLAlchemy(app)
@@ -138,7 +139,7 @@ with app.app_context():
     
     # db.session.add(admin)
     db.session.commit()
-    # print(User().query.all())
+    print(User().query.all())
     # Delete all rows from the User table
     # db.session.query(Product).delete
 
